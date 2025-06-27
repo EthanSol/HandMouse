@@ -1,4 +1,3 @@
-import cv2
 import mediapipe as mp
 
 # Initialize MediaPipe Drawing Utils
@@ -15,9 +14,7 @@ class HandDetector:
         )
 
     def getHandsFromRGBFrame(self, rgb_frame):
-        # Process the frame and detect hands
-        results = self._hands.process(rgb_frame)
-        return results
+       return self._hands.process(rgb_frame)
 
     def getHandConnections(self):
         return self._mp_hands.HAND_CONNECTIONS
