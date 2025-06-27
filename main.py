@@ -1,7 +1,7 @@
 import joblib
 import cv2
 import mediapipe as mp
-from HandDetector import HandDetector
+from GestureDetector import GestureDetector
 from mediapipe_common import convert_landmarks_and_handedness_to_features
 
 # Initialize MediaPipe Drawing Utils
@@ -16,8 +16,8 @@ def main():
         print("Cannot open camera")
         return
 
-    # Use HandDetector as a context manager
-    with HandDetector() as hand_detector:
+    # Use GestureDetector as a context manager
+    with GestureDetector(model_path="gesture_model.pkl", confidence_threshold=0.0) as gesture_detector:
         while True:
             ret, frame = cap.read()
             if not ret:
@@ -27,17 +27,7 @@ def main():
             # Flip the frame horizontally for a mirror effect
             frame = cv2.flip(frame, 1)
 
-            results = hand_detector.getHandsFromRGBFrame(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
-            # Draw hand landmarks and predict gesture
-            if results.multi_hand_landmarks and results.multi_handedness:
-                for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                    features = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
-                    gesture_prediction = gesture_classifier.predict([features])[0]
-
-                    cv2.putText(frame, gesture_prediction, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
-                    mp_drawing.draw_landmarks(
-                        frame, hand_landmarks, hand_detector.getHandConnections())
+            gesture = gesture_detector.get_gesture(frame, debug=True)
 
             # Display the resulting frame
             cv2.imshow('Hand Tracking', frame)
