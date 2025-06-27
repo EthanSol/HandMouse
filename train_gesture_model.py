@@ -25,7 +25,7 @@ y_train = train_df.iloc[:, -1]
 X_test = test_df.iloc[:, :-1]
 y_test = test_df.iloc[:, -1]
 
-clf = RandomForestClassifier(n_estimators=50, random_state=42)
+clf = RandomForestClassifier(n_estimators=70, random_state=42)
 clf.fit(X_train, y_train)
 
 y_pred = clf.predict(X_test)
