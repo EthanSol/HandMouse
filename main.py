@@ -1,11 +1,15 @@
+import joblib
 import cv2
 import mediapipe as mp
 from HandDetector import HandDetector
+from mediapipe_common import convert_landmarks_and_handedness_to_features
 
 # Initialize MediaPipe Drawing Utils
 mp_drawing = mp.solutions.drawing_utils
 
 def main():
+    gesture_classifier = joblib.load("gesture_model.pkl")
+
     # Open the default camera (usually the webcam)
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -25,9 +29,13 @@ def main():
 
             results = hand_detector.getHandsFromRGBFrame(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-            # Draw hand landmarks if detected
-            if results.multi_hand_landmarks:
-                for hand_landmarks in results.multi_hand_landmarks:
+            # Draw hand landmarks and predict gesture
+            if results.multi_hand_landmarks and results.multi_handedness:
+                for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+                    features = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
+                    gesture_prediction = gesture_classifier.predict([features])[0]
+
+                    cv2.putText(frame, gesture_prediction, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
                     mp_drawing.draw_landmarks(
                         frame, hand_landmarks, hand_detector.getHandConnections())
 
