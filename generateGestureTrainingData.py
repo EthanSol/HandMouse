@@ -5,9 +5,7 @@ import csv
 import cv2
 import mediapipe as mp
 import os
-
-def extract_landmarks(hand_landmarks):
-    return [coord for lm in hand_landmarks.landmark for coord in (lm.x, lm.y, lm.z)]
+from mediapipe_common import convert_landmarks_and_handedness_to_features
 
 # Initialize MediaPipe Drawing Utils
 mp_drawing = mp.solutions.drawing_utils
@@ -36,10 +34,7 @@ while True:
         
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                row = extract_landmarks(hand_landmarks)
-
-                left_right_feature = 0 if handedness.classification[0].label == 'Left' else 1
-                row.append(left_right_feature)
+                row = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
                 row.append(label)
                 data.append(row)
 
