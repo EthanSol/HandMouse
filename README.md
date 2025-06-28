@@ -4,8 +4,9 @@ HandMouse is a computer vision project that tracks hand movements using a camera
 
 ## How to Use HandMouse
 
-1. Start with an open hand and move it in front of the camera.
-2. The following hand gestures control the mouse:
+1. Follow getting started below to set up the mouse.
+2. Start with an open hand and move it in front of the camera.
+3. The following hand gestures control the mouse:
    - **Open hand**: No action (cursor does not move or click).
    - **Pointing up and moving your hand**: Moves (grabs) the cursor.
    - **Fist**: Performs a left click.
@@ -15,13 +16,12 @@ HandMouse is a computer vision project that tracks hand movements using a camera
 
 ### Optional: Automated Setup
 
-You can also use the provided install.py script to automate the setup and skip to step 3 below:
+The provided install.py script automates virtual environment and dependency setup. Skip to step 3 below after installing.
 
 ```bash
 python install.py
 ```
 
-Follow the prompts to create a virtual environment and install dependencies.
 
 ### 1. (Recommended) Create a Virtual Environment
 
