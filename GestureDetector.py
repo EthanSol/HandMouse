@@ -20,23 +20,29 @@ class GestureDetector:
 
     def get_gesture(self, frame, debug=False):
         # Analyze frame for hand features
-        results = self.hand_detector.getHandsFromRGBFrame(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        hand_detection = self.hand_detector.getHandsFromRGBFrame(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
         gesture_prediction = None
-        confidence = 0.0
-        if results.multi_hand_landmarks and results.multi_handedness:
-            for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+        wrist_pos = (0, 0, 0)
+        if hand_detection.multi_hand_landmarks and hand_detection.multi_handedness:
+            for hand_landmarks, handedness in zip(hand_detection.multi_hand_landmarks, hand_detection.multi_handedness):
                 features = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
 
                 prediction, confidence = self.get_prediction_and_confidence(features)
                 if confidence >= self._confidence_threshold:
                     gesture_prediction = prediction
 
+                wrist = hand_landmarks.landmark[0]
+                wrist_pos = (wrist.x, wrist.y, wrist.z)
+
                 if debug:
                     text = f"{prediction} ({confidence:.2f})" if gesture_prediction else f"Low conf ({confidence:.2f})"
                     cv2.putText(frame, text, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
+                    wrist_text = f"Wrist: x={wrist.x:.2f}, y={wrist.y:.2f}, z={wrist.z:.2f}"
+                    cv2.putText(frame, wrist_text, (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
                     self.mp_drawing.draw_landmarks(
                         frame, hand_landmarks, self.hand_detector.getHandConnections())
-        return gesture_prediction
+
+        return gesture_prediction, wrist_pos
 
     def close(self):
         self.hand_detector.close()

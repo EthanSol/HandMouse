@@ -1,7 +1,9 @@
 # parameters are expected to be outputs from a MediaPipe hand detection model.
 def convert_landmarks_and_handedness_to_features(landmarks, handedness):
     # Flatten the landmarks
-    features = [coord for lm in landmarks.landmark for coord in (lm.x, lm.y, lm.z)]
+    features = []
+    for lm in landmarks.landmark:
+        features.extend([lm.x, lm.y, lm.z])
     
     # Add handedness feature
     left_right_feature = 0 if handedness.classification[0].label == 'Left' else 1
