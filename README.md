@@ -62,7 +62,7 @@ python generateGestureTrainingData.py
 3. When prompted, enter the gesture you want to replace (`open`, `pointer`, `primary_select`, or `secondary_select`).
 4. When the camera opens, show the camera the gesture and hold the space bar to capture hand data.
 5. Move your hand around the camera's field of view to capture multiple angles and perspectives. Move it closer and further away. Use both hands for more robust data.
-6. When finished, close the window.
+6. When finished, close the window by pressing 'q'.
 7. Retrain the model by running:
 
 ```bash
