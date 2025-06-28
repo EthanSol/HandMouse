@@ -8,14 +8,15 @@ class CursorAction(Enum):
     RightClick = 3
 
 class CursorController:
-    def __init__(self):
+    def __init__(self, sensitivity=2):
         self.last_action = CursorAction.NoAction
         self.last_position = (0, 0)
+        self.sensitivity = sensitivity
 
     def move_cursor(self, x_move, y_move):
         width, height = pyautogui.size()
-        x_move = x_move * width
-        y_move = y_move * height
+        x_move = x_move * width * self.sensitivity
+        y_move = y_move * height * self.sensitivity
 
         x, y = pyautogui.position()
         pyautogui.moveTo(x + x_move, y + y_move)
@@ -37,6 +38,9 @@ class CursorController:
                 self.last_action = CursorAction.RightClick
         elif action == CursorAction.MoveCursor:
             self.move_cursor(x_pos - self.last_position[0], y_pos - self.last_position[1])
+        elif action == CursorAction.NoAction: # want to avoid cycling through NoAction
+            self.last_position = (x_pos, y_pos)
+            return
 
         self.last_action = action
         self.last_position = (x_pos, y_pos)

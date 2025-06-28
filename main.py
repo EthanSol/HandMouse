@@ -27,7 +27,7 @@ def main():
         print("Cannot open camera")
         return
     
-    cursor_controller = CursorController()
+    cursor_controller = CursorController(sensitivity=2)
 
     # Use GestureDetector as a context manager
     with GestureDetector(model_path="gesture_model.pkl", confidence_threshold=0.4) as gesture_detector:
