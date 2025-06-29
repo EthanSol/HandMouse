@@ -1,7 +1,7 @@
 import joblib
 import cv2
 from HandDetector import HandDetector
-from mediapipe_common import convert_landmarks_and_handedness_to_features
+from mediapipe_common import convert_landmarks_and_handedness_to_features, convert_hand_metadata_to_distances
 import mediapipe as mp
 
 class GestureDetector:
@@ -25,7 +25,7 @@ class GestureDetector:
         wrist_pos = (0, 0, 0)
         if hand_detection.multi_hand_landmarks and hand_detection.multi_handedness:
             for hand_landmarks, handedness in zip(hand_detection.multi_hand_landmarks, hand_detection.multi_handedness):
-                features = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
+                features = convert_hand_metadata_to_distances(hand_landmarks, handedness)
 
                 prediction, confidence = self.get_prediction_and_confidence(features)
                 if confidence >= self._confidence_threshold:

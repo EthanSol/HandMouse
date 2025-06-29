@@ -19,8 +19,6 @@ def gesture_to_cursor_action(gesture):
         return CursorAction.NoAction
 
 def main():
-    gesture_classifier = joblib.load("gesture_model.pkl")
-
     # Open the default camera (usually the webcam)
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
@@ -30,7 +28,7 @@ def main():
     cursor_controller = CursorController(sensitivity=2)
 
     # Use GestureDetector as a context manager
-    with GestureDetector(model_path="gesture_model.pkl", confidence_threshold=0.4) as gesture_detector:
+    with GestureDetector(model_path="gesture_model_rf.pkl", confidence_threshold=0.4) as gesture_detector:
         while True:
             ret, frame = cap.read()
             if not ret:
