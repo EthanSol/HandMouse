@@ -5,13 +5,13 @@ import csv
 import cv2
 import mediapipe as mp
 import os
-from mediapipe_common import convert_landmarks_and_handedness_to_features
+from mediapipe_common import convert_landmarks_and_handedness_to_features, convert_hand_metadata_to_distances
 
 # Initialize MediaPipe Drawing Utils
 mp_drawing = mp.solutions.drawing_utils
 
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(max_hands=1)
+hands = mp_hands.Hands()
 cap = cv2.VideoCapture(0)
 
 label = input("Enter gesture label (e.g., 'fist'): ")
@@ -28,13 +28,13 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     
-    if cv2.waitKey(5) & 0xFF == ord(' '):
+    if cv2.waitKey(20) & 0xFF == ord(' '):
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = hands.process(rgb)
         
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
-                row = convert_landmarks_and_handedness_to_features(hand_landmarks, handedness)
+                row = convert_hand_metadata_to_distances(hand_landmarks, handedness)
                 row.append(label)
                 data.append(row)
 

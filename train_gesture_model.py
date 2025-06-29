@@ -3,6 +3,7 @@ import glob
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.neighbors import KNeighborsClassifier
 from sklearn.utils import shuffle
 import joblib
 
@@ -25,12 +26,31 @@ y_train = train_df.iloc[:, -1]
 X_test = test_df.iloc[:, :-1]
 y_test = test_df.iloc[:, -1]
 
-clf = RandomForestClassifier(n_estimators=70, random_state=42)
-clf.fit(X_train, y_train)
+# Determine k for KNeighborsClassifier as the number of unique labels in the training set
+k = len(y_train.unique())
 
-y_pred = clf.predict(X_test)
-print('Accuracy:', accuracy_score(y_test, y_pred))
-print('Classification Report:\n', classification_report(y_test, y_pred))
+# Train RandomForestClassifier
+clf_rf = RandomForestClassifier(n_estimators=70, random_state=42)
+clf_rf.fit(X_train, y_train)
 
-joblib.dump(clf, 'gesture_model.pkl')
-print('Model saved as gesture_model.pkl')
+# Train KNeighborsClassifier
+clf_knn = KNeighborsClassifier(n_neighbors=k)
+clf_knn.fit(X_train, y_train)
+
+# Evaluate RandomForestClassifier
+print('RandomForestClassifier Results:')
+y_pred_rf = clf_rf.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred_rf))
+print('Classification Report:\n', classification_report(y_test, y_pred_rf))
+
+# Evaluate KNeighborsClassifier
+print('KNeighborsClassifier Results:')
+y_pred_knn = clf_knn.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred_knn))
+print('Classification Report:\n', classification_report(y_test, y_pred_knn))
+
+# Save both models
+joblib.dump(clf_rf, 'gesture_model_rf.pkl')
+print('RandomForest model saved as gesture_model_rf.pkl')
+joblib.dump(clf_knn, 'gesture_model_knn.pkl')
+print('KNN model saved as gesture_model_knn.pkl')
