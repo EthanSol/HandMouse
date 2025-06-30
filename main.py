@@ -1,4 +1,3 @@
-import joblib
 import cv2
 import mediapipe as mp
 from GestureDetector import GestureDetector
@@ -28,7 +27,7 @@ def main():
     cursor_controller = CursorController(sensitivity=2)
 
     # Use GestureDetector as a context manager
-    with GestureDetector(model_path="gesture_model_rf.pkl", confidence_threshold=0.4) as gesture_detector:
+    with GestureDetector(model_path="gesture_model_knn.pkl", confidence_threshold=0.4) as gesture_detector:
         while True:
             ret, frame = cap.read()
             if not ret:
