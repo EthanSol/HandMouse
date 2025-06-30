@@ -46,7 +46,7 @@ def main():
             cv2.imshow('Hand Tracking', frame)
 
             # Exit on 'q' key
-            if cv2.waitKey(1) & 0xFF == ord('q'):
+            if cv2.waitKey(10) & 0xFF == ord('q'):
                 break
 
     # Release the capture and close windows
