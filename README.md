@@ -73,3 +73,8 @@ python train_gesture_model.py
 
 Your new gesture data will now be used by HandMouse.
 
+## Notable Improvements:
+
+1. Feature engineering. Instead of passing raw x,y,z data to the model, I calculate the distances between finger bases and tips so that the model can determine which fingers are extended and which are curled. The model can ignore x,y,z locations which are meaningless when not related to one another. Gesture recognition improved by at least 20%
+2. Using KNN instead of a RandomForest model classifies gestures with significantly better accuracy. This switch was intentional after improvement #1 because KNN can cluster based on finger lengths. Gesture classification accuracy improved to nearly 100%
+
