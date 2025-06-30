@@ -2,7 +2,7 @@
 
 HandMouse is a computer vision project that tracks hand movements using a camera and translates them into mouse input for controlling a cursor.
 
-[Demo Video!](https://youtu.be/n7NbaOWfuok)
+[Demo Video!](https://youtu.be/HMiuJux3JFU)
 
 ## How to Use HandMouse
 
